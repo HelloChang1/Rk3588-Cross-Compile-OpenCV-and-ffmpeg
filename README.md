@@ -1,10 +1,10 @@
 # opencv与ffmpeg源码交叉编译
 ## step1:环境准备
 
--linux系统：unbuntu18.04 X86_64
--rk3588软件包：rknn-toolkit2:1.5.2-cp36
--交叉编译工具：gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu
--硬件平台：瑞芯微RK3588
+linux系统：unbuntu18.04 X86_64
+rk3588软件包：rknn-toolkit2:1.5.2-cp36
+交叉编译工具：gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu
+硬件平台：瑞芯微RK3588
 
 ### 1. 创建docker虚拟环境
 
@@ -17,12 +17,12 @@
 ```bash
     vim ~/.bashrc
 ```
-    在文件最后添加：
+在文件最后添加：
 ```bash
     export LD_LIBRARY_PATH=/opt/aarch64-rockchip-linux-gnu/lib:/opt/aarch64-rockchip-linux-gnu/lib64:/opt/arm/fffmpeginstall/lib:$LD_LIBRARY_PATH
     export PATH=$PATH:/opt/aarch64-rockchip-linux-gnu/bin
 ```
-    添加后保存并:
+添加后保存并:
 ```bash
     source ~/.bashrc
 ```
@@ -38,13 +38,13 @@ apt-get install build-essential pkg-config
 ```
 
 cmake3.23.0:
-	https://cmake.org/download/
+https://cmake.org/download/
 opencv-4.5.1:
-	https://opencv.org/releases/page/2/
+https://opencv.org/releases/page/2/
 opencv_contrib-4.5.1:
-	https://github.com/opencv/opencv_contrib/releases/tag/4.5.1
+https://github.com/opencv/opencv_contrib/releases/tag/4.5.1
 ffmpeg-4.2.9:
-	https://ffmpeg.org/download.html#releases
+https://ffmpeg.org/download.html#releases
 
 
 以上软件下载源码后，解压至/opt目录下，并创键arm文件夹用于存放ffmeg相关配置文件
@@ -118,18 +118,19 @@ vim tool_chain.cmake
 ```
 
 修改tool_chain.cmake文件，添加以下内容（**注意修改相关路径**）：
-    set( CMAKE_SYSTEM_NAME Linux )
-    set( CMAKE_SYSTEM_PROCESSOR aarch64 )
-    set( CMAKE_C_COMPILER /opt/aarch64-rockchip-linux-gnu/bin/aarch64-none-linux-gnu-gcc)
-    set( CMAKE_CXX_COMPILER /opt/aarch64-rockchip-linux-gnu/bin/aarch64-none-linux-gnu-g++)
-    #set( OPENCV_ENABLE_PKG_CONFIG ON)
-    #set( CMAKE_C_FLAGS "-Wl,-rpath-link=/opt/arm/fffmpeginstall/lib")
-    set( CMAKE_FIND_ROOT_PATH "/opt/arm/fffmpeginstall/lib" )
-    set( CMAKE_CXX_FLAGS "-Wl,-rpath=/opt/arm/fffmpeginstall/lib")
-    set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER )
-    set( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY )
-    set( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY )
-
+```bash
+set( CMAKE_SYSTEM_NAME Linux )
+set( CMAKE_SYSTEM_PROCESSOR aarch64 )
+set( CMAKE_C_COMPILER /opt/aarch64-rockchip-linux-gnu/bin/aarch64-none-linux-gnu-gcc)
+set( CMAKE_CXX_COMPILER /opt/aarch64-rockchip-linux-gnu/bin/aarch64-none-linux-gnu-g++)
+#set( OPENCV_ENABLE_PKG_CONFIG ON)
+#set( CMAKE_C_FLAGS "-Wl,-rpath-link=/opt/arm/fffmpeginstall/lib")
+set( CMAKE_FIND_ROOT_PATH "/opt/arm/fffmpeginstall/lib" )
+set( CMAKE_CXX_FLAGS "-Wl,-rpath=/opt/arm/fffmpeginstall/lib")
+set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER )
+set( CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY )
+set( CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY )
+```
 ### 2. opencv编译链接ffmpeg
 保存后关闭文件，进入opencv源码根目录，进入build文件夹，执行以下命令：
 ```bash
@@ -143,5 +144,4 @@ make -j$(nproc)
 ```bash
 make install
 ```
-Done
-
+完成
